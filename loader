@@ -1,0 +1,68 @@
+-- AkazHub launcher
+-- Selects and runs the script associated with the current Roblox place.
+
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local placeScripts = {
+    [286090429] = "https://raw.githubusercontent.com/yast95/Arsenal/refs/heads/main/Arsninal", -- Arsenal
+    [13822562292] = "https://pastefy.app/16YhRWsk/raw", -- Midnight Chaser
+    [77747658251236] = "https://pastebin.com/raw/QSbv7EH9", -- Sailor Piece
+    [6872265039] = "https://raw.githubusercontent.com/yast95/Bedwars/refs/heads/main/Bedwars", -- BedWars
+    [3351674303] = "https://pastefy.app/yu8zLoRB/raw", -- Driving Empire
+    [97598239454123] = "https://raw.githubusercontent.com/yast95/GAG2/refs/heads/main/grow%20a%20garden%202", -- Grow a Garden 2
+    [17625359962] = "https://raw.githubusercontent.com/yast95/Rivals/refs/heads/main/AkazRivals", -- Rivals
+    [89469502395769] = "https://raw.githubusercontent.com/yast95/Kick-a-Lucky-Block/refs/heads/main/Akaz%20by%20as95", -- Kick a Lucky Block
+    [79268393072444] = "https://raw.githubusercontent.com/yast95/SELL-LEMONS-V2/refs/heads/main/566", -- Sell a Lemons
+    [124216119978534] = "https://raw.githubusercontent.com/yast95/Shaytan-a-la-mess-saisai/refs/heads/main/Ride%20A%20pet", -- Ride A Pet
+    [107778070777162] = "https://raw.githubusercontent.com/yast95/steal-an-egg/refs/heads/main/sae", -- Steal An Egg
+}
+
+local function getGameName()
+    local success, info = pcall(function()
+        return MarketplaceService:GetProductInfo(game.PlaceId)
+    end)
+
+    if success and info and info.Name then
+        return info.Name
+    end
+
+    return "unknown game"
+end
+
+local function runRemoteScript(url)
+    local downloaded, source = pcall(function()
+        return game:HttpGet(url)
+    end)
+
+    if not downloaded then
+        error("download failed: " .. tostring(source))
+    end
+
+    local chunk, compileError = loadstring(source)
+    if not chunk then
+        error("compile failed: " .. tostring(compileError))
+    end
+
+    return chunk()
+end
+
+local scriptUrl = placeScripts[game.PlaceId]
+
+if not scriptUrl then
+    warn("[AkazHub] No script configured for PlaceId " .. tostring(game.PlaceId))
+    return
+end
+
+print("[AkazHub] Loading " .. getGameName() .. " (" .. tostring(game.PlaceId) .. ")...")
+
+local success, runtimeError = xpcall(function()
+    runRemoteScript(scriptUrl)
+end, function(message)
+    return debug.traceback(tostring(message), 2)
+end)
+
+if success then
+    print("[AkazHub] Script executed successfully.")
+else
+    warn("[AkazHub] " .. runtimeError)
+end

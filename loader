@@ -15,6 +15,7 @@ local placeScripts = {
     [79268393072444] = "https://raw.githubusercontent.com/yast95/SELL-LEMONS-V2/refs/heads/main/566", -- Sell a Lemons
     [124216119978534] = "https://raw.githubusercontent.com/yast95/Shaytan-a-la-mess-saisai/refs/heads/main/Ride%20A%20pet", -- Ride A Pet
     [107778070777162] = "https://raw.githubusercontent.com/yast95/steal-an-egg/refs/heads/main/sae", -- Steal An Egg
+    [126870639873289] = "https://raw.githubusercontent.com/yast95/Jump-For-Animals/refs/heads/main/Jump%20For%20Animals", -- Jump For Animals
 }
 
 local function getGameName()
